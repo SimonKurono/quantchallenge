@@ -110,7 +110,7 @@ public:
 
   /**
    * Called whenever a basketball game event occurs.
-   *
+   * 
    * @param event_type Type of event that occurred
    * @param home_away Team indicator ("home", "away", or "unknown")
    * @param home_score Home team score after event

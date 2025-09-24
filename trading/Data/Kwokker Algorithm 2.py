@@ -28,7 +28,7 @@ def place_market_order(side: Side, ticker: Ticker, quantity: float) -> None:
         Quantity of order to place
     """
 
-    #print(f"Python Trade update: {ticker, side, quantity}")
+    print(f"Python Trade update: {ticker} {side} {quantity}")
 
     return
 
@@ -107,7 +107,7 @@ class Strategy:
         price
             Price that trade was executed at
         """
-        #print(f"Price: {price}")
+        print(f"Price: {price}")
 
     def on_orderbook_update(
         self, ticker: Ticker, side: Side, quantity: float, price: float
@@ -191,40 +191,17 @@ class Strategy:
             Game time remaining in seconds
         """
 
-        score_dif = home_score - away_score
+        if event_type != "NOTHING":
+            place_market_order(Side.BUY, Ticker.TEAM_A, 1)
+            print(f"event_type = {event_type}, home_away = {home_away}, home_score = {home_score}, away_score = {away_score}, player_name = {player_name}, substituted_player_name = {substituted_player_name}, shot_type = {shot_type}, assist_player = {assist_player}, rebound_type = {rebound_type}, coordinate_x = {coordinate_x}, coordinate_y = {coordinate_y}, time_seconds = {time_seconds}")
+            print()
+            print(f"Bought 1 share of TEAM_A @ market price")
         
-        time_threshold = 2 * 60  # 2 minutes in seconds
-        score_threshold = round((1/360) * time_seconds**2.0) + 1
-
-        if (time_seconds is not None and time_seconds <= time_threshold and abs(score_dif) <= score_threshold):
-            if (score_dif >= 0):
-                # Home team is winning
-                if home_away == "home":
-                    place_market_order(side=Side.BUY, ticker=Ticker.Team_A, quantity=100)
-                    print(f"Bought team A at market price with {time_seconds} seconds left and score dif {score_dif}")
-                elif home_away == "away":
-                    place_market_order(side=Side.SELL, ticker=Ticker.Team_A, quantity=100)
-                    print(f"Sold team A at market price with {time_seconds} seconds left and score dif {score_dif}")        
-                
-                
-            elif (score_dif < 0):
-                # Away team is winning
-                if home_away == "away":
-                    place_market_order(side=Side.SELL, ticker=Ticker.Team_A, quantity=100)
-                    print(f"Sold team A at market price with {time_seconds} seconds left and score dif {score_dif}")
-                elif home_away == "home":
-                    place_market_order(side=Side.BUY, ticker=Ticker.Team_A, quantity=100)
-                    print(f"Bought team A at market price with {time_seconds} seconds left and score dif {score_dif}")
-                
-                
-
-                
        
-        #print(f"{event_type} {home_score} - {away_score}")
+        print(f"{event_type} {home_score} - {away_score}")
 
         if event_type == "END_GAME":
             # IMPORTANT: Highly recommended to call reset_state() when the
             # game ends. See reset_state() for more details.
             self.reset_state()
             return
-        pass
