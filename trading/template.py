@@ -191,30 +191,23 @@ class Strategy:
             Game time remaining in seconds
         """
 
-        score_dif = home_score - away_score
-        
-        time_threshold = 2 * 60  # 2 minutes in seconds
-        score_threshold = round((1/360) * time_seconds**2.0) + 1
+        if event_type == "TURNOVER" or event_type == "STEAL":
+            print(f"{event_type} {home_score} - {away_score}")
+            # Home team is winning
+            if home_away == "home":
+                place_market_order(side=Side.BUY, ticker=Ticker.Team_A, quantity=100)
+                print(f"Bought team A at market price with {time_seconds} seconds left")
+            elif home_away == "away":
+                place_market_order(side=Side.SELL, ticker=Ticker.Team_A, quantity=100)
+                print(f"Sold team A at market price with {time_seconds} seconds left")        
+            
 
-        if (time_seconds is not None and time_seconds <= time_threshold and abs(score_dif) <= score_threshold):
-            if (score_dif >= 0):
-                # Home team is winning
-                if home_away == "home":
-                    place_market_order(side=Side.BUY, ticker=Ticker.Team_A, quantity=100)
-                    print(f"Bought team A at market price with {time_seconds} seconds left and score dif {score_dif}")
-                elif home_away == "away":
-                    place_market_order(side=Side.SELL, ticker=Ticker.Team_A, quantity=100)
-                    print(f"Sold team A at market price with {time_seconds} seconds left and score dif {score_dif}")        
-                
-                
-            elif (score_dif < 0):
-                # Away team is winning
-                if home_away == "away":
-                    place_market_order(side=Side.SELL, ticker=Ticker.Team_A, quantity=100)
-                    print(f"Sold team A at market price with {time_seconds} seconds left and score dif {score_dif}")
-                elif home_away == "home":
-                    place_market_order(side=Side.BUY, ticker=Ticker.Team_A, quantity=100)
-                    print(f"Bought team A at market price with {time_seconds} seconds left and score dif {score_dif}")
+            if home_away == "away":
+                place_market_order(side=Side.SELL, ticker=Ticker.Team_A, quantity=100)
+                print(f"Sold team A at market price with {time_seconds} seconds left")
+            elif home_away == "home":
+                place_market_order(side=Side.BUY, ticker=Ticker.Team_A, quantity=100)
+                print(f"Bought team A at market price with {time_seconds} seconds left")
                 
                 
 
