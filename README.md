@@ -13,7 +13,7 @@
 ---
 
 ## ⚙️ How the Algorithm Works
-The trading algorithm (`Strategy` class) is a **quantitative market-making system** with built-in risk control.
+The trading algorithm (`kwokker-algo.py`) file is a **quantitative market-making system** with built-in risk control.
 
 1. **Order Book Tracking**  
    - Keeps a minimal local view of the **best bid and best ask** with available liquidity.  
