@@ -1,18 +1,19 @@
 # Quant Challenge 2025 – Strategy README
+## Part I — Research: Predictive Modeling
+The research phase focused on building a **supervised learning model** to estimate in-game outcome probabilities.
 
-## 🔢 How the Model Works
-- The dataset provides game features (`A–N`) and outcomes (`Y1`, `Y2`).
-- The model maps **game state variables** (score difference, momentum, home advantage, and time) into a **win probability estimate**.  
-- This mapping uses a **logistic (sigmoid) function**, ensuring probabilities stay between 0% and 100%.  
-- Scaling is applied so that early-game leads are weighted less, while late-game leads and momentum shifts matter more.  
-- The predicted win probability is then expressed as a **fair market value** on a 0–100 price scale:
-  - `0 = certain loss`
-  - `100 = certain win`
-- This fair value acts as the **anchor price** the strategy compares against the market bid/ask quotes.
+- **Dataset:** Features `A–N` and target variables `Y1`, `Y2`.  
+- **Goal:** Predict continuous win-probability estimates for downstream trading.  
+- **Model:** `XGBoostRegressor` tuned via `RandomizedSearchCV` over parameters such as `learning_rate`, `max_depth`, `subsample`, and `colsample_bytree`.  
+- **Feature Engineering:**  
+  - Rolling **means** and **standard deviations** to capture momentum and volatility.  
+  - **Interaction terms** and **temporal flags** (early/mid/late phase) for contextual sensitivity.  
+  - Standardization (z-score) to stabilize across varying scales.  
+- **Validation:** Time-series cross-validation with early stopping; residual autocorrelation checks and feature-importance tracking for interpretability.  
 
 ---
 
-## ⚙️ How the Algorithm Works
+## Part II — Algorithmic Trading Strategy
 The trading algorithm (`kwokker-algo.py`) file is a **quantitative market-making system** with built-in risk control.
 
 1. **Order Book Tracking**  
